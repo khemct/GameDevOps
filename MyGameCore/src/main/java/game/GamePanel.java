@@ -61,16 +61,18 @@ public class GamePanel extends JPanel {
 
     private void updateRectangle() {
         xDelta += xDir;
-        if(xDelta > 500||xDelta < 0)
-            xDir*=-1;
-        color = getRandomColor();
+        if (xDelta > 500 || xDelta < 0) {
+            xDir *= -1;
+            color = getRandomColor(); // เปลี่ยนสีเฉพาะตอนชนขอบ
+        }
 
         yDelta += yDir;
-        if(yDelta > 500||yDelta < 0)
-            yDir*=-1;
-        color = getRandomColor();
-
+        if (yDelta > 500 || yDelta < 0) {
+            yDir *= -1;
+            color = getRandomColor(); // เปลี่ยนสีเฉพาะตอนชนขอบ
+        }
     }
+
 
     private Color getRandomColor() {
        int r = random.nextInt(255);
