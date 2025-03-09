@@ -49,6 +49,7 @@ public class GamePanel extends JPanel {
                 animations[j][i] = img.getSubimage(i*135,j*140 ,135, 140);
 
     }
+    
 
     private void importImg() {
         InputStream is = getClass().getResourceAsStream("/ManWalk.png");
