@@ -3,82 +3,144 @@ package game;
 import inputs.KeyBoardInputs;
 import inputs.MouseInputs;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.util.Random;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+
+import static utilz.Constants.PlayerConstants.*;
+import static utilz.Constants.Directions.*;
+
 
 public class GamePanel extends JPanel {
 
     private MouseInputs mouseInputs;
-    private float xDelta=100,yDelta=100;
-    private float xDir =0.03f,yDir =0.03f;
+    private float xDelta = 100, yDelta = 100;
     private int frames = 0;
     private long lastCheck = 0;
-    private Color color = new Color(150,20,90);
-    private Random random;
+    private BufferedImage img;
+    private BufferedImage[][] animations;
+    private int aniTick, aniIndex, aniSpeed = 160;
+    private int playerAction = IDLE;
+    private int playerDir = -1;
+    private boolean moving = false;
 
     public GamePanel(){
-        random = new Random();
-
         mouseInputs = new MouseInputs(this);
+
+        importImg();
+        loadAnimation();
+
+        setPanelSize();
         addKeyListener(new KeyBoardInputs(this));
         addMouseListener(mouseInputs);
         addMouseMotionListener(mouseInputs);
     }
 
-    public void changeXDelta(int value){
-        this.xDelta += value;
+    private void loadAnimation() {
+        animations = new BufferedImage[3][5];
 
+        for(int j = 0; j < animations.length; j++)
+            for(int i = 0; i < animations[j].length; i++)
+                animations[j][i] = img.getSubimage(i * 135, j * 140, 135, 140);
     }
-    public void changeYDelta(int value){
-        this.yDelta += value;
+    
 
+    private void importImg() {
+        InputStream is = getClass().getResourceAsStream("/ManWalk.png");
+
+        try {
+            img = ImageIO.read(is);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
-    public void setRectPos(int x, int y){
-        this.xDelta=x;
-        this.yDelta=y;
+
+    private void setPanelSize() {
+        Dimension size = new Dimension(1280,800);
+        setMaximumSize(size);
+        setMinimumSize(size);
+        setPreferredSize(size);
+    }
+
+    private void updateAnimationTick() {
+        aniTick++;
+        if(aniTick >= aniSpeed) {
+            aniTick = 0;
+            aniIndex++;
+
+            System.out.println("aniIndex: " + aniIndex + " / GetSpriteAmount: " + GetSpriteAmount(playerAction));
+            // เพิ่มการตรวจสอบไม่ให้ aniIndex เกินขอบเขตของ array
+            if(aniIndex >= animations[playerAction].length) {
+                aniIndex = 0;  // รีเซ็ต index เมื่อเกินขอบเขต
+            }
+        }
+    }
+
+
+    public void setDirection(int direction) {
+        this.playerDir = direction;
+        moving = true;
+    }
+
+    public void setMoving(boolean moving) {
+        this.moving = moving;
+    }
+
+    private void setAnimation() {
+        if (moving)
+            playerAction = RUNNING;
+        else
+            playerAction = IDLE;
+    }
+
+    private void updatePos() {
+        if (moving) {
+            switch (playerDir) {
+                case LEFT:
+                    xDelta -= 1;
+                    break;
+                case UP:
+                    yDelta -= 1;
+                    break;
+                case RIGHT:
+                    xDelta += 1;
+                    break;
+                case DOWN:
+                    yDelta += 1;
+                    break;
+            }
+        }
+    }
+
+    public void updateGame(){
+        updateAnimationTick();
+        setAnimation();
+        updatePos();
 
     }
 
     public void paintComponent(Graphics g){
-
         super.paintComponent(g);
-        updateRectangle();
-        g.setColor(color);
-        g.fillRect((int)xDelta,(int)yDelta,200,50 );
 
+        g.drawImage(animations[playerAction][aniIndex],(int)xDelta, (int)yDelta,67,70, null);
+        
 
         frames++;
-        if(System.currentTimeMillis() - lastCheck >= 1000){
+        if (System.currentTimeMillis() - lastCheck >= 1000) {
             lastCheck = System.currentTimeMillis();
-            System.out.println("FPS : "+frames);
             frames=0;
 
         }
 
         repaint();
-    }
-
-    private void updateRectangle() {
-        xDelta += xDir;
-        if (xDelta > 500 || xDelta < 0) {
-            xDir *= -1;
-            color = getRandomColor(); // เปลี่ยนสีเฉพาะตอนชนขอบ
-        }
-
-        yDelta += yDir;
-        if (yDelta > 500 || yDelta < 0) {
-            yDir *= -1;
-            color = getRandomColor(); // เปลี่ยนสีเฉพาะตอนชนขอบ
-        }
-    }
-
-
-    private Color getRandomColor() {
-       int r = random.nextInt(255);
-       int b = random.nextInt(255);
-       int g = random.nextInt(255);
-
-       return new Color(r, b,g);
     }
 }
