@@ -46,6 +46,7 @@ public class GamePanel extends JPanel {
             for(int i = 0; i < animations[j].length; i++)
                 animations[j][i] = img.getSubimage(i * 135, j * 140, 135, 140);
     }
+    
 
     private void importImg() {
         InputStream is = getClass().getResourceAsStream("/ManWalk.png");
@@ -120,20 +121,24 @@ public class GamePanel extends JPanel {
         }
     }
 
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    public void updateGame(){
         updateAnimationTick();
-
         setAnimation();
         updatePos();
 
-        g.drawImage(animations[playerAction][aniIndex], (int) xDelta, (int) yDelta, 67, 70, null);
+    }
+
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
+
+        g.drawImage(animations[playerAction][aniIndex],(int)xDelta, (int)yDelta,67,70, null);
+        
 
         frames++;
         if (System.currentTimeMillis() - lastCheck >= 1000) {
             lastCheck = System.currentTimeMillis();
-            System.out.println("FPS : " + frames);
-            frames = 0;
+            frames=0;
+
         }
 
         repaint();
