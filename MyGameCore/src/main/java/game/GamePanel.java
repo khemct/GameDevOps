@@ -120,12 +120,15 @@ public class GamePanel extends JPanel {
         }
     }
 
-    public void paintComponent(Graphics g){
-        super.paintComponent(g);
+    public void updateGame(){
         updateAnimationTick();
-
         setAnimation();
         updatePos();
+
+    }
+
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
 
         g.drawImage(animations[playerAction][aniIndex],(int)xDelta, (int)yDelta,67,70, null);
         
@@ -133,7 +136,6 @@ public class GamePanel extends JPanel {
         frames++;
         if(System.currentTimeMillis() - lastCheck >= 1000){
             lastCheck = System.currentTimeMillis();
-            System.out.println("FPS : "+frames);
             frames=0;
 
         }
