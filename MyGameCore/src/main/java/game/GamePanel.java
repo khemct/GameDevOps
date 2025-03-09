@@ -17,7 +17,7 @@ import static utilz.Constants.Directions.*;
 public class GamePanel extends JPanel {
 
     private MouseInputs mouseInputs;
-    private float xDelta=100,yDelta=100;
+    private float xDelta = 100, yDelta = 100;
     private int frames = 0;
     private long lastCheck = 0;
     private BufferedImage img;
@@ -26,8 +26,6 @@ public class GamePanel extends JPanel {
     private int playerAction = IDLE;
     private int playerDir = -1;
     private boolean moving = false;
-
-
 
     public GamePanel(){
         mouseInputs = new MouseInputs(this);
@@ -46,8 +44,7 @@ public class GamePanel extends JPanel {
 
         for(int j = 0; j < animations.length; j++)
             for(int i = 0; i < animations[j].length; i++)
-                animations[j][i] = img.getSubimage(i*135,j*140 ,135, 140);
-
+                animations[j][i] = img.getSubimage(i * 135, j * 140, 135, 140);
     }
 
     private void importImg() {
@@ -73,36 +70,39 @@ public class GamePanel extends JPanel {
         setPreferredSize(size);
     }
 
-
     private void updateAnimationTick() {
-
         aniTick++;
         if(aniTick >= aniSpeed) {
             aniTick = 0;
             aniIndex++;
-            if(aniIndex >= GetSpriteAmount(playerAction)) {
-                aniIndex = 0;
+
+            System.out.println("aniIndex: " + aniIndex + " / GetSpriteAmount: " + GetSpriteAmount(playerAction));
+            // เพิ่มการตรวจสอบไม่ให้ aniIndex เกินขอบเขตของ array
+            if(aniIndex >= animations[playerAction].length) {
+                aniIndex = 0;  // รีเซ็ต index เมื่อเกินขอบเขต
             }
         }
-
     }
+
+
     public void setDirection(int direction) {
         this.playerDir = direction;
         moving = true;
     }
+
     public void setMoving(boolean moving) {
         this.moving = moving;
     }
 
     private void setAnimation() {
-        if(moving)
+        if (moving)
             playerAction = RUNNING;
         else
             playerAction = IDLE;
     }
 
     private void updatePos() {
-        if(moving) {
+        if (moving) {
             switch (playerDir) {
                 case LEFT:
                     xDelta -= 1;
@@ -120,26 +120,22 @@ public class GamePanel extends JPanel {
         }
     }
 
-    public void paintComponent(Graphics g){
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
         updateAnimationTick();
 
         setAnimation();
         updatePos();
 
-        g.drawImage(animations[playerAction][aniIndex],(int)xDelta, (int)yDelta,67,70, null);
-        
+        g.drawImage(animations[playerAction][aniIndex], (int) xDelta, (int) yDelta, 67, 70, null);
 
         frames++;
-        if(System.currentTimeMillis() - lastCheck >= 1000){
+        if (System.currentTimeMillis() - lastCheck >= 1000) {
             lastCheck = System.currentTimeMillis();
-            System.out.println("FPS : "+frames);
-            frames=0;
-
+            System.out.println("FPS : " + frames);
+            frames = 0;
         }
 
         repaint();
     }
-
-
 }
