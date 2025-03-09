@@ -15,7 +15,7 @@ public class Player extends Entity{
     private BufferedImage[][] animations;
     private int aniTick, aniIndex, aniSpeed = 160;
     private int playerAction = IDLE;
-    private boolean moving = false;
+    private boolean moving = false, attacking = false;
     private boolean left, up, right, down;
     private float playerSpeed = 2.0f;
 
@@ -40,10 +40,23 @@ public class Player extends Entity{
     }
 
     private void setAnimation() {
+        int startAni = playerAction;
+
         if (moving)
             playerAction = RUNNING;
         else
             playerAction = IDLE;
+
+        if (attacking)
+            playerAction = ATTACK_1;
+
+        if (startAni != playerAction)
+            resetAniTick();
+    }
+
+    private void resetAniTick(){
+        aniTick = 0;
+        aniIndex = 0;
     }
 
     private void updateAnimationTick() {
@@ -54,8 +67,9 @@ public class Player extends Entity{
 
             System.out.println("aniIndex: " + aniIndex + " / GetSpriteAmount: " + GetSpriteAmount(playerAction));
             // เพิ่มการตรวจสอบไม่ให้ aniIndex เกินขอบเขตของ array
-            if(aniIndex >= animations[playerAction].length) {
+            if(aniIndex >= GetSpriteAmount(playerAction)) {
                 aniIndex = 0;  // รีเซ็ต index เมื่อเกินขอบเขต
+                attacking = false;
             }
         }
     }
@@ -113,6 +127,10 @@ public class Player extends Entity{
         right = false;
         up = false;
         down = false;
+    }
+
+    public void setAttacking(boolean attacking) {
+        this.attacking = attacking;
     }
 
     public boolean isLeft() {
