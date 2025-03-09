@@ -17,6 +17,7 @@ public class Player extends Entity{
     private int playerAction = IDLE;
     private boolean moving = false;
     private boolean left, up, right, down;
+    private float playerSpeed = 2.0f;
 
     public Player(float x, float y){
         super(x, y);
@@ -25,9 +26,10 @@ public class Player extends Entity{
 
     public void update(){
 
+        updatePos();
         updateAnimationTick();
         setAnimation();
-        updatePos();
+
 
     }
 
@@ -60,7 +62,25 @@ public class Player extends Entity{
 
     private void updatePos() {
 
+        moving = false;
 
+        if (left && !right){
+            x -= playerSpeed;
+            moving = true;
+
+        } else if (right && !left){
+            x += playerSpeed;
+            moving = true;
+        }
+
+        if (up && !down){
+            y -= playerSpeed;
+            moving = true;
+
+        } else if (down && !up){
+            y += playerSpeed;
+            moving = true;
+        }
 
     }
 
@@ -88,7 +108,15 @@ public class Player extends Entity{
 
     }
 
+    public void resetDirBooleans(){
+        left = false;
+        right = false;
+        up = false;
+        down = false;
+    }
+
     public boolean isLeft() {
+
         return left;
     }
 
