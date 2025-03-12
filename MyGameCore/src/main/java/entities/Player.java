@@ -10,11 +10,11 @@ import static utilz.HelpMethods.CanMoveHere;
 public class Player extends Entity{
 
     private BufferedImage[][] animations;
-    private int aniTick, aniIndex, aniSpeed = 160;
+    private int aniTick, aniIndex, aniSpeed = 20;
     private int playerAction = IDLE;
     private boolean moving = false, attacking = false;
     private boolean left, up, right, down;
-    private float playerSpeed = 2.0f;
+    private float playerSpeed = 2.2f;
     private int[][] lvlData;
     private float xDrawOffset = 21  * Game.SCALE;
     private float yDrawOffset = 4  * Game.SCALE;
@@ -37,7 +37,7 @@ public class Player extends Entity{
 
     public void render(Graphics g){
 
-        g.drawImage(animations[playerAction][aniIndex],(int)(hitbox.x - xDrawOffset), (int)(hitbox.y - yDrawOffset),67,70, null);
+        g.drawImage(animations[playerAction][aniIndex],(int)(hitbox.x - xDrawOffset), (int)(hitbox.y - yDrawOffset),128,80, null);
         drawHitbox(g);
 
     }
@@ -45,17 +45,17 @@ public class Player extends Entity{
     private void setAnimation() {
         int startAni = playerAction;
 
-        if (moving)
+        if (attacking)
+            playerAction = ATTACK_1;
+        else if (moving)
             playerAction = RUNNING;
         else
             playerAction = IDLE;
 
-        if (attacking)
-            playerAction = ATTACK_1;
-
         if (startAni != playerAction)
             resetAniTick();
     }
+
 
     private void resetAniTick(){
         aniTick = 0;
@@ -71,9 +71,11 @@ public class Player extends Entity{
             System.out.println("aniIndex: " + aniIndex + " / GetSpriteAmount: " + GetSpriteAmount(playerAction));
             // เพิ่มการตรวจสอบไม่ให้ aniIndex เกินขอบเขตของ array
             if(aniIndex >= GetSpriteAmount(playerAction)) {
-                aniIndex = 0;  // รีเซ็ต index เมื่อเกินขอบเขต
-                attacking = false;
+                aniIndex = 0;
+                if (playerAction == ATTACK_1)  // รีเซ็ตการโจมตีหลังจากแอนิเมชันโจมตีเท่านั้น
+                    attacking = false;
             }
+
         }
     }
 
@@ -110,15 +112,27 @@ public class Player extends Entity{
     }
 
     private void loadAnimation() {
+        BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.PLAYER_ATLAS);
+        animations = new BufferedImage[9][]; // รองรับทุกแอคชัน
 
-            BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.PLAYER_ATLAS);
+        animations[IDLE] = new BufferedImage[5];
+        animations[RUNNING] = new BufferedImage[6];
+        animations[ATTACK_1] = new BufferedImage[3];
+        animations[HIT] = new BufferedImage[4];
+        animations[JUMP] = new BufferedImage[3];
+        animations[ATTACK_JUMP_1] = new BufferedImage[3];
+        animations[ATTACK_JUMP_2] = new BufferedImage[3];
+        animations[GROUND] = new BufferedImage[2];
+        animations[FALLING] = new BufferedImage[1];
 
-            animations = new BufferedImage[3][5];
-            for (int j = 0; j < animations.length; j++)
+        for (int j = 0; j < animations.length; j++) {
+            if (animations[j] != null) { // เช็คว่า array นั้นมีอยู่จริง
                 for (int i = 0; i < animations[j].length; i++)
-                    animations[j][i] = img.getSubimage(i * 135, j * 140, 135, 140);
-
+                    animations[j][i] = img.getSubimage(i * 64, j * 40, 64, 40);
+            }
+        }
     }
+
 
     public void loadLvlData(int[][] lvlData){
         this.lvlData = lvlData;
