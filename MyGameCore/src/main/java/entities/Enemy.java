@@ -97,6 +97,8 @@ public abstract class Enemy extends Entity{
             aniIndex++;
             if (aniIndex >= GetSpriteAmount(enemyType, enemyState)) {
                 aniIndex = 0;
+                if (enemyState == ATTACK)
+                    enemyState = IDLE;
             }
         }
     }
