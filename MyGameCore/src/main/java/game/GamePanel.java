@@ -1,6 +1,7 @@
 package game;
 
-import inputs.KeyBoardInputs;
+import inputs.KeyboardInputs;
+import inputs.KeyboardInputs;
 import inputs.MouseInputs;
 
 import javax.imageio.ImageIO;
@@ -21,35 +22,30 @@ public class GamePanel extends JPanel {
     private MouseInputs mouseInputs;
     private Game game;
 
-    public GamePanel(Game game){
+    public GamePanel(Game game) {
         mouseInputs = new MouseInputs(this);
         this.game = game;
-
         setPanelSize();
-        addKeyListener(new KeyBoardInputs(this));
+        addKeyListener(new KeyboardInputs(this));
         addMouseListener(mouseInputs);
         addMouseMotionListener(mouseInputs);
     }
 
-
     private void setPanelSize() {
-        Dimension size = new Dimension(GAME_WIDTH,GAME_HEIGHT);
-        setMaximumSize(size);
-        setMinimumSize(size);
+        Dimension size = new Dimension(GAME_WIDTH, GAME_HEIGHT);
         setPreferredSize(size);
-        System.out.println("size : "+GAME_WIDTH+ " : " +GAME_HEIGHT);
     }
 
-    public void updateGame(){
+    public void updateGame() {
 
     }
 
-    public void paintComponent(Graphics g){
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
         game.render(g);
     }
 
-    public Game getGame(){
+    public Game getGame() {
         return game;
     }
 
