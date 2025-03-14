@@ -26,7 +26,7 @@ public class HelpMethods {
         float xIndex = x / Game.TILES_SIZE;
         float yIndex = y / Game.TILES_SIZE;
 
-        return IsSolid((int) xIndex, (int) yIndex, lvlData);
+        return IsTileSolid((int) xIndex, (int) yIndex, lvlData);
 
     }
 
@@ -75,9 +75,12 @@ public class HelpMethods {
     }
 
     public static boolean IsAllTileWalkable(int xStart, int xEnd, int y, int[][] lvlData) {
-        for(int i = 0; i < xEnd - xStart; i++)
+        for(int i = 0; i < xEnd - xStart; i++) {
             if (IsTileSolid(xStart + i, y, lvlData))
                 return false;
+            if (!IsTileSolid(xStart + i, y, lvlData))
+                return false;
+        }
         return true;
     }
 
