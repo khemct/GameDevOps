@@ -70,6 +70,12 @@ public class Player extends Entity {
 
     public void update() {
         updateHealthBar();
+
+        if (currentHealth <= 0) {
+            playing.setGameOver(true);
+            return;
+        }
+
         updateAttackBox();
 
         updatePos();
@@ -105,7 +111,7 @@ public class Player extends Entity {
                    (int) (hitbox.y - yDrawOffset),
                    width * flipW, height, null);
 //		drawHitbox(g, lvlOffset);
-        drawAttckBox(g, lvlOffset);
+//        drawAttckBox(g, lvlOffset);
         drawUI(g);
     }
 
@@ -310,6 +316,21 @@ public class Player extends Entity {
 
     public void setJump(boolean jump) {
         this.jump = jump;
+    }
+
+    public void resetAll(){
+        resetDirBooleans();
+        inAir = false;
+        attacking = false;
+        moving = false;
+        playerAction = IDLE;
+        currentHealth = maxHealth;
+
+        hitbox.x = x;
+        hitbox.y = y;
+
+        if (!IsEntityOnFloor(hitbox, lvlData))
+            inAir = true;
     }
 
 }
