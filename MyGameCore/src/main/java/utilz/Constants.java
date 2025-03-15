@@ -4,6 +4,10 @@ import game.Game;
 
 public class Constants {
 
+    public static final float GRAVITY = 0.04f * Game.SCALE;
+    public static final int ANI_SPEED = 25;
+
+
     public static class EnemyConstants {
         public static final int CRABBY = 0;
 
