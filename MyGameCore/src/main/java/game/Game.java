@@ -4,6 +4,7 @@ import entities.Player;
 import gamestates.Gamestate;
 import gamestates.Playing;
 import gamestates.Menu;
+import utilz.LoadSave;
 
 import java.awt.*;
 
@@ -27,6 +28,7 @@ public class Game implements Runnable {
     public final static int GAME_HEIGHT = TILES_SIZE * TILES_IN_HEIGHT;
 
     public Game() {
+
         initClasses();
 
         gamePanel = new GamePanel(this);
