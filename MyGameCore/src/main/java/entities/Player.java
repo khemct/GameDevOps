@@ -101,7 +101,7 @@ public class Player extends Entity {
         if(right){
             attackBox.x = hitbox.x + hitbox.width + (int) (Game.SCALE * 10);
         }else if(left){
-            attackBox.x = hitbox.x + hitbox.width - (int) (Game.SCALE * 40);
+            attackBox.x = hitbox.x - hitbox.width - (int) (Game.SCALE * 10);
         }
         attackBox.y = hitbox.y + (Game.SCALE  * 10);
     }
