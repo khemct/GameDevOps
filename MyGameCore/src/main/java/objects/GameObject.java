@@ -80,6 +80,10 @@ public class GameObject {
         return active;
     }
 
+    public void setAnimation(boolean doAnimation) {
+        this.doAnimation = doAnimation;
+    }
+
     public void setActive(boolean active) {
         this.active = active;
     }
