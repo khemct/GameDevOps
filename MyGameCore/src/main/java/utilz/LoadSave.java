@@ -1,25 +1,18 @@
 package utilz;
 
-import entities.Crabby;
-import game.Game;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
 
-import static utilz.Constants.EnemyConstants.CRABBY;
+import javax.imageio.ImageIO;
 
 public class LoadSave {
 
     public static final String PLAYER_ATLAS = "player_sprites.png";
     public static final String LEVEL_ATLAS = "outside_sprites.png";
-
     public static final String MENU_BUTTONS = "button_atlas.png";
     public static final String MENU_BACKGROUND = "menu_background.png";
     public static final String PAUSE_BACKGROUND = "pause_menu.png";
@@ -33,6 +26,9 @@ public class LoadSave {
     public static final String CRABBY_SPRITE = "crabby_sprite.png";
     public static final String STATUS_BAR = "health_power_bar.png";
     public static final String COMPLETED_IMG = "completed_sprite.png";
+
+    public static final String POTION_ATLAS = "potions_sprites.png";
+    public static final String CONTAINER_ATLAS = "objects_sprites.png";
 
     public static BufferedImage GetSpriteAtlas(String fileName) {
         BufferedImage img = null;
@@ -61,6 +57,7 @@ public class LoadSave {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+
         File[] files = file.listFiles();
         File[] filesSorted = new File[files.length];
 
@@ -68,6 +65,7 @@ public class LoadSave {
             for (int j = 0; j < files.length; j++) {
                 if (files[j].getName().equals((i + 1) + ".png"))
                     filesSorted[i] = files[j];
+
             }
 
         BufferedImage[] imgs = new BufferedImage[filesSorted.length];
@@ -79,9 +77,7 @@ public class LoadSave {
                 e.printStackTrace();
             }
 
-
-        return imgs ;
-
+        return imgs;
     }
 
 }
