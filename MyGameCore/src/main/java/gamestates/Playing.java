@@ -288,4 +288,8 @@ public class Playing extends State implements Statemethods {
         return objectManager;
     }
 
+    public LevelManager getLevelManager() {
+        return levelManager;
+    }
+
 }
