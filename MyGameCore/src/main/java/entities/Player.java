@@ -37,10 +37,17 @@ public class Player extends Entity {
     private int healthBarHeight = (int) (4 *  Game.SCALE);
     private int healthBarXStart = (int) (34 *  Game.SCALE);
     private int healthBarYStart = (int) (14 *  Game.SCALE);
-
 //    private int maxHealth = 100;
 //    private int currentHealth = maxHealth;
     private int healthWidth = healthBarWidth;
+
+    private int powerBarWidth = (int) (104 * Game.SCALE);
+    private int powerBarHeight = (int) (2 * Game.SCALE);
+    private int powerBarXStart = (int) (44 * Game.SCALE);
+    private int powerBarYStart = (int) (34 * Game.SCALE);
+    private int powerWidth = powerBarWidth;
+    private int powerMaxValue = 200;
+    private int powerValue = powerMaxValue;
 
     private int flipX = 0;
     private int flipW = 1;
@@ -49,6 +56,11 @@ public class Player extends Entity {
     private Playing playing;
 
     private int tileY = 0;
+
+    private boolean powerAttackActive;
+    private int powerAttackTick;
+    private int powerGrowSpeed = 15;
+    private int powerGrowTick;
 
     public Player(float x, float y, int width, int height, Playing playing) {
         super(x, y, width, height);
