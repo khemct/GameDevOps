@@ -1,9 +1,11 @@
 package game;
 
 import entities.Player;
+import gamestates.GameOptions;
 import gamestates.Gamestate;
 import gamestates.Playing;
 import gamestates.Menu;
+import ui.AudioOptions;
 import utilz.LoadSave;
 
 import java.awt.*;
@@ -18,6 +20,8 @@ public class Game implements Runnable {
 
     private Playing playing;
     private Menu menu;
+    private GameOptions gameOptions;
+    private AudioOptions audioOptions;
 
     public final static int TILES_DEFAULT_SIZE = 32;
     public final static float SCALE = 2f;
@@ -28,7 +32,6 @@ public class Game implements Runnable {
     public final static int GAME_HEIGHT = TILES_SIZE * TILES_IN_HEIGHT;
 
     public Game() {
-
         initClasses();
 
         gamePanel = new GamePanel(this);
@@ -37,12 +40,13 @@ public class Game implements Runnable {
         gamePanel.requestFocus();
 
         startGameLoop();
-
     }
 
     private void initClasses() {
+        audioOptions = new AudioOptions();
         menu = new Menu(this);
         playing = new Playing(this);
+        gameOptions = new GameOptions(this);
     }
 
     private void startGameLoop() {
@@ -59,6 +63,8 @@ public class Game implements Runnable {
                 playing.update();
                 break;
             case OPTIONS:
+                gameOptions.update();
+                break;
             case QUIT:
             default:
                 System.exit(0);
@@ -74,6 +80,9 @@ public class Game implements Runnable {
                 break;
             case PLAYING:
                 playing.draw(g);
+                break;
+            case OPTIONS:
+                gameOptions.draw(g);
                 break;
             default:
                 break;
@@ -136,5 +145,13 @@ public class Game implements Runnable {
 
     public Playing getPlaying() {
         return playing;
+    }
+
+    public GameOptions getGameOptions() {
+        return gameOptions;
+    }
+
+    public AudioOptions getAudioOptions() {
+        return audioOptions;
     }
 }
