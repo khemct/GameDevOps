@@ -90,6 +90,7 @@ public class Player extends Entity {
 
     public void update() {
         updateHealthBar();
+        updatePowerBar();
 
         if (currentHealth <= 0) {
             if (state != DEAD){
@@ -151,6 +152,16 @@ public class Player extends Entity {
     private void updateHealthBar() {
         healthWidth = (int) ((currentHealth / (float)maxHealth) * healthBarWidth) ;
     }
+    private void updatePowerBar() {
+        powerWidth = (int) ((powerValue / (float)powerMaxValue) * powerBarWidth);
+
+        powerGrowTick++;
+        if (powerGrowTick >= powerMaxValue) {
+            powerGrowTick = 0;
+            changePower(1);
+        }
+
+    }
 
     public void render(Graphics g, int lvlOffset) {
         g.drawImage(animations[state][aniIndex],
@@ -163,9 +174,16 @@ public class Player extends Entity {
     }
 
     private void drawUI(Graphics g) {
+        //Background UI
         g.drawImage(statusBarImg,statusBarX,statusBarY,statusBarWidth,statusBarHeight,null);
+
+        //Health bar
         g.setColor(Color.red);
         g.fillRect(healthBarXStart + statusBarX,healthBarYStart + statusBarY,healthWidth,healthBarHeight);
+
+        //Power bar
+        g.setColor(Color.yellow);
+        g.fillRect(powerBarXStart + statusBarX,powerBarYStart + statusBarY,powerWidth,powerBarHeight);
     }
 
     private void updateAnimationTick() {
@@ -299,7 +317,12 @@ public class Player extends Entity {
     }
 
     public void changePower(int value){
-        System.out.println("Add P O W E R !!!");
+        powerValue += value;
+
+        if(powerValue >= powerMaxValue)
+            powerValue = powerMaxValue;
+        else if( powerValue <= 0)
+            powerValue = 0;
     }
 
     private void loadAnimations() {
